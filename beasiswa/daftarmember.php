@@ -6,11 +6,12 @@ $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $peserta       = trim($_POST['peserta'] ?? '');
+    $nama_sekolah  = trim($_POST['nama_sekolah'] ?? '');
     $tgl_lahir     = trim($_POST['tgl_lahir'] ?? '');
     $nilai_rata    = trim($_POST['nilai_rata'] ?? '');
     $status_berkas = isset($_POST['status_berkas']) ? (int)$_POST['status_berkas'] : 0;
 
-    if ($peserta === '' || $tgl_lahir === '' || $nilai_rata === '') {
+    if ($peserta === '' || $nama_sekolah === '' || $tgl_lahir === '' || $nilai_rata === '') {
         $error = "Semua field wajib diisi.";
     } elseif (!isset($_FILES['file_berkas']) || $_FILES['file_berkas']['error'] !== UPLOAD_ERR_OK) {
         $error = "Silakan upload file berkas (JPG/PNG/PDF).";
@@ -44,10 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 if (!move_uploaded_file($upload['tmp_name'], $targetPath)) {
                     $error = "Gagal menyimpan file upload.";
                 } else {
-                    // SIMPAN DATA
                     $stmt = $koneksi->prepare("
-                        INSERT INTO member (peserta, tgl_lahir, nilai_rata, status_berkas, file_berkas, waktu_daftar)
-                        VALUES (?, ?, ?, ?, ?, NOW())
+                        INSERT INTO member (peserta, nama_sekolah, tgl_lahir, nilai_rata, status_berkas, file_berkas, waktu_daftar)
+                        VALUES (?, ?, ?, ?, ?, ?, NOW())
                     ");
 
                     if (!$stmt) {
@@ -56,9 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     } else {
                         $nilai_rata_val = (float)$nilai_rata;
 
-                        // FIX UTAMA → jumlah parameter benar (5)
-                        $stmt->bind_param("ssdis",
+                        $stmt->bind_param("sssdis",
                             $peserta,
+                            $nama_sekolah,
                             $tgl_lahir,
                             $nilai_rata_val,
                             $status_berkas,
@@ -92,8 +92,36 @@ $koneksi->close();
 <style>
 :root{--bg1:#071129;--bg2:#0f2949;--accent:#ff7a59;--muted:#cbd5e1}
 *{box-sizing:border-box}
-body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--muted);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.card{width:100%;max-width:820px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);backdrop-filter:blur(6px);border-radius:14px;padding:28px;box-shadow:0 12px 40px rgba(3,10,30,0.6)}
+
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:var(--muted);
+    min-height:100vh;
+
+    /* FIX FORM TETAP DI TENGAH */
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    padding:24px;
+}
+
+/* Agar card tidak menempel footer */
+.card{
+    width:100%;
+    max-width:820px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.04);
+    backdrop-filter:blur(6px);
+    border-radius:14px;
+    padding:28px;
+    box-shadow:0 12px 40px rgba(3,10,30,0.6);
+    margin-bottom:40px; /* jarak bawah agar footer rapi */
+}
+
 .header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
 .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#ffb085);display:flex;align-items:center;justify-content:center;font-weight:700;color:#082033}
 h1{margin:0;font-size:20px;color:#fff}
@@ -111,6 +139,15 @@ input:focus,select:focus{border-color:var(--accent)}
 .alert.success{background:rgba(76,175,80,0.12);color:#4caf50;border:1px solid rgba(76,175,80,0.2)}
 .thanks{text-align:center;padding:30px}
 .thanks h2{color:#fff;margin-bottom:8px}
+
+/* FOOTER – hanya tambahkan ini */
+footer{
+    text-align:center;
+    color:#cbd5e1;
+    margin-top:auto;
+    padding:10px 0;
+    font-size:14px;
+}
 </style>
 </head>
 <body>
@@ -146,6 +183,9 @@ input:focus,select:focus{border-color:var(--accent)}
         <label>Nama Peserta</label>
         <input type="text" name="peserta" required>
 
+        <label style="margin-top:12px">Nama Sekolah</label>
+        <input type="text" name="nama_sekolah" required>
+
         <div class="form-row" style="margin-top:10px">
             <div class="col">
                 <label>Tanggal Lahir</label>
@@ -177,6 +217,10 @@ input:focus,select:focus{border-color:var(--accent)}
 
 </div>
 
+<footer>
+    <p>@2025 Platform Beasiswa dibuat oleh JESSICA LOURENT XII5.</p>
+    <p>Hubungi kami: info@beasiswa.com | +62 812-3456-7890</p>
+</footer>
+
 </body>
 </html>
-

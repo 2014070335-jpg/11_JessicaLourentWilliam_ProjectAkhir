@@ -106,6 +106,23 @@ tr:hover{
     text-decoration:none;
 }
 .download-link:hover{text-decoration:underline}
+
+/* Tombol kecil untuk edit & hapus */
+.btn-mini{
+    padding:6px 10px;
+    font-size:12px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+    color:#082033;
+    background:linear-gradient(90deg,var(--accent),#ffb085);
+    text-decoration:none;
+}
+.btn-mini.red{
+    background:rgba(255,80,80,0.8);
+    color:white;
+}
 </style>
 </head>
 <body>
@@ -124,16 +141,19 @@ tr:hover{
             <th>No</th>
             <th>Nama Peserta</th>
             <th>Tgl Lahir</th>
+            <th>Nama Sekolah</th>
             <th>Nilai Rata</th>
             <th>Status Berkas</th>
             <th>File</th>
             <th>Waktu Daftar</th>
+            <th>Aksi</th>
         </tr>
 
         <?php
         $no = 1;
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
+
                 $status = $row['status_berkas'] == 1 
                     ? "<span class='badge green'>Lengkap</span>" 
                     : "<span class='badge red'>Belum Lengkap</span>";
@@ -143,16 +163,26 @@ tr:hover{
                     <td>{$no}</td>
                     <td>{$row['peserta']}</td>
                     <td>{$row['tgl_lahir']}</td>
+                    <td>{$row['nama_sekolah']}</td>
                     <td>{$row['nilai_rata']}</td>
                     <td>{$status}</td>
                     <td><a class='download-link' href='upload_member/{$row['file_berkas']}' target='_blank'>Download</a></td>
                     <td>{$row['waktu_daftar']}</td>
+
+                    <td>
+                        <a class='btn-mini' href='edit_member.php?id={$row['id']}'>Edit</a>
+                        <a class='btn-mini red' 
+                           href='delete_member.php?id={$row['id']}' 
+                           onclick=\"return confirm('Yakin ingin menghapus data ini?');\">
+                           Delete
+                        </a>
+                    </td>
                 </tr>
                 ";
                 $no++;
             }
         } else {
-            echo "<tr><td colspan='7' style='text-align:center;color:#ccc'>Belum ada data member.</td></tr>";
+            echo "<tr><td colspan='9' style='text-align:center;color:#ccc'>Belum ada data member.</td></tr>";
         }
         ?>
     </table>
@@ -160,4 +190,5 @@ tr:hover{
 
 </body>
 </html>
+
 

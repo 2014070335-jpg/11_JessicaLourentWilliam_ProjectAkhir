@@ -33,57 +33,136 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['login'])) {
 <style>
 :root{--bg1:#071129;--bg2:#0f2949;--accent:#ff7a59;--muted:#cbd5e1}
 *{box-sizing:border-box}
-body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--muted);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.card{width:100%;max-width:420px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(6px);border-radius:14px;padding:28px;box-shadow:0 12px 40px rgba(3,10,30,0.5)}
-h1{text-align:center;color:#fff;font-size:22px;margin-bottom:12px}
-label{display:block;margin-top:12px;margin-bottom:6px;color:#e8f0ff}
-input{width:100%;padding:10px;
-    border-radius:8px;background:rgba(0,0,0,0.18);
+
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:var(--muted);
+    min-height:100vh;
+
+    /* FIX AGAR FORM TETAP DI TENGAH */
+    display:flex;
+    flex-direction:column;
+}
+
+/* WRAPPER AGAR CARD TETAP DI TENGAH */
+.main-container{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+}
+
+.card{
+    width:100%;
+    max-width:420px;
+    background:rgba(255,255,255,0.05);
     border:1px solid rgba(255,255,255,0.06);
-    color:white}
+    backdrop-filter:blur(6px);
+    border-radius:14px;
+    padding:28px;
+    box-shadow:0 12px 40px rgba(3,10,30,0.5)
+}
+
+h1{
+    text-align:center;
+    color:#fff;
+    font-size:22px;
+    margin-bottom:12px
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    margin-bottom:6px;
+    color:#e8f0ff
+}
+
+input{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    background:rgba(0,0,0,0.18);
+    border:1px solid rgba(255,255,255,0.06);
+    color:white
+}
+
 input:focus{border-color:var(--accent)}
-.btn{width:100%;
+
+.btn{
+    width:100%;
     margin-top:20px;
-    padding:12px;border:none;
-    border-radius:10px;background:linear-gradient(90deg,var(--accent),#ffb085);
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg,var(--accent),#ffb085);
     color:#082033;
     font-weight:700;
-    cursor:pointer}
-.alert{padding:12px;background:rgba(255,0,0,0.15);color:#ff6b6b;border-radius:10px;margin-bottom:10px}
+    cursor:pointer
+}
+
+.alert{
+    padding:12px;
+    background:rgba(255,0,0,0.15);
+    color:#ff6b6b;
+    border-radius:10px;
+    margin-bottom:10px
+}
+
 .center{text-align:center;margin-top:12px}
+
 a{text-decoration:none;color:var(--accent);font-weight:600}
+
+/* === FIX FOOTER DI BAWAH === */
+footer{
+    text-align:center;
+    padding:15px;
+    color:#fff;
+    background:rgba(0,0,0,0.25);
+    margin-top:auto;
+}
 </style>
 
 </head>
 <body>
 
-<div class="card">
+<div class="main-container">
+    <div class="card">
 
-<h1>Login Admin</h1>
+        <h1>Login Admin</h1>
 
-<?php if($error): ?>
-    <div class="alert"><?= $error ?></div>
-<?php endif; ?>
+        <?php if($error): ?>
+            <div class="alert"><?= $error ?></div>
+        <?php endif; ?>
 
-<form method="POST">
+        <form method="POST">
 
-    <label>Email</label>
-    <input type="email" name="email" required>
+            <label>Email</label>
+            <input type="email" name="email" required>
 
-    <label>Password</label>
-    <input type="password" name="password" required>
+            <label>Password</label>
+            <input type="password" name="password" required>
 
-    <button class="btn" name="login">Masuk</button>
+            <button class="btn" name="login">Masuk</button>
 
-</form>
+        </form>
 
-<div class="center">
-    <a href="admin_regist.php">Buat akun admin</a>
+        <div class="center">
+            <a href="admin_regist.php">Buat akun admin</a>
+        </div>
+
+    </div>
 </div>
 
-</div>
+<footer>
+    <p>@2025 Platform Beasiswa dibuat oleh JESSICA LOURENT XII5.</p>
+    <p>Hubungi kami: info@beasiswa.com | +62 812-3456-7890</p>
+</footer>
 
 </body>
 </html>
+
 
 
